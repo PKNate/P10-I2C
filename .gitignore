@@ -1,0 +1,6 @@
+$ cat .gitignore
+/*
+!*.c
+!*.h
+!*.pdsprj
+!.gitignore
