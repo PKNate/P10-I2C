@@ -17,6 +17,7 @@ void main()
      SSD1306_DrawPixel(10, 10);
      SSD1306_Display();
      delay_ms(2000);
+     
    }
 }
 
