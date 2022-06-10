@@ -33,9 +33,11 @@
 #use fast_io(B)
 #use I2C(MASTER, I2C1, FAST = 400000, stream = SSD1306_STREAM)  // Initialize I2C
 
+//0-16: yellow
+//17-127: blue
+
 // Include SSD1306 OLED driver source code
 #include <SSD1306OLED.c>
-
 
 void testdrawcircle(void) {
   for (int8 i = 0; i < SSD1306_LCDHEIGHT; i += 2) {
@@ -181,7 +183,6 @@ void testscrolltext(void) {
   delay_ms(2000);
   SSD1306_StopScroll();
 }
-
 
 void main(void) {
 

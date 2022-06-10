@@ -1,6 +1,8 @@
 $ cat .gitignore
 /*
+!/Arduino
 !*.c
 !*.h
 !*.pdsprj
 !.gitignore
+!README.md
