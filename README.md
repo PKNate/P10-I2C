@@ -1,7 +1,6 @@
 # P10-I2C
-A turn and slip indicator using a gyroscope and a magnetometer, shown on a 128x64 OLED screen.
-
-Final project for Microsystems
+##Final project for Microsystems
+A turn and slip indicator on a PIC18F4550, using a gyroscope/accelerometer (MPU6050 GY-521) and a magnetometer (QMC5883 GY-273), shown on a 128x64 OLED screen (SSD1306).
 
 - Arduino sketches from https://naylampmechatronics.com/
 - I2C library from https://github.com/jrowberg/i2cdevlib
