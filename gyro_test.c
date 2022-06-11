@@ -34,6 +34,7 @@ void main()
    SSD1306_Begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
    InitMpu6050();
    delay_ms(100);
+   
    while(true)
    {
       timer=get_timer0(); 
