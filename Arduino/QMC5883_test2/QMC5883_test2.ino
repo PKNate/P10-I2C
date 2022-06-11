@@ -5,7 +5,7 @@ QMC5883LCompass compass;
 void setup() {
   Serial.begin(9600);
   compass.init();
-  compass.setCalibration(-1070, 498, -370, 1037, -1022, 0);
+  compass.setCalibration(-1546, 1020, -903, 1830, -1137, 1370);
 }
 
 void loop() {

@@ -8,11 +8,33 @@
 #include <QMC5883.c>
 
 char txt[30];
-signed long x_value = 0;
-signed long y_value = 0;
-signed long z_value = 0;
-float heading = 0.0;
 
+signed int16 x_min = -1070;
+signed int16 x_max = 1392;
+signed int16 y_min = -800;
+signed int16 y_max = 1402;
+signed int16 z_min = -1131;
+signed int16 z_max = 2243;
+signed int16 x_value;
+signed int16 y_value;
+signed int16 z_value;
+float x_value_float;
+float y_value_float;
+float z_value_float;
+float x_offset;
+float y_offset;
+float z_offset;
+float x_avg_delta;
+float y_avg_delta;
+float z_avg_delta;
+float avg_delta;
+float x_scale;
+float y_scale;
+float z_scale;
+float a;
+
+void startCalibration();
+void calibrationCompass();
 void readCompass();
 
 void main()
@@ -26,40 +48,84 @@ void main()
    delay_ms(100);
    while(true)
    {
-      QMC5883_read_axes(&x_value, &y_value, &z_value);
-      heading = QMC5883_read_heading(y_value, x_value);
-      
+      //startCalibration();
+      readCompass();
+
       SSD1306_ClearDisplay();
-      sprintf(txt, "x=%Ld",x_value);
+      sprintf(txt, "A=%5.2f",a);
       SSD1306_DrawText(0, 0, txt,1);
-      sprintf(txt, "y=%Ld",y_value);
-      SSD1306_DrawText(0, 25, txt,1);
-      sprintf(txt, "z=%Ld",z_value);
-      SSD1306_DrawText(0, 50, txt,1);
-      sprintf(txt, "H=%5.2f",heading);
-      SSD1306_DrawText(60, 0, txt,1);
       SSD1306_Display();
-      
-      /*
-      SSD1306_ClearDisplay();
-      sprintf(txt, "ax=%Ld",ax);
-      SSD1306_DrawText(0, 0, txt,1);
-      sprintf(txt, "ay=%Ld",ay);
-      SSD1306_DrawText(0, 25, txt,1);
-      sprintf(txt, "az=%Ld",az);
-      SSD1306_DrawText(0, 50, txt,1);
-      sprintf(txt, "gx=%Ld",gx);
-      SSD1306_DrawText(60, 0, txt,1);
-      sprintf(txt, "gy=%Ld",gy);
-      SSD1306_DrawText(60, 25, txt,1);
-      sprintf(txt, "gz=%Ld",gz);
-      SSD1306_DrawText(60, 50, txt,1);
-      SSD1306_Display();   
-      */
    }
 }
 
+void calibrationCompass()
+{
+   x_offset = (float)(x_min + x_max)/2;
+   y_offset = (float)(y_min + y_max)/2;
+   z_offset = (float)(z_min + z_max)/2;
+   x_avg_delta = (float)(x_max - x_min)/2;
+   y_avg_delta = (float)(y_max - y_min)/2;
+   z_avg_delta = (float)(z_max - z_min)/2;
 
+   avg_delta = (x_avg_delta + y_avg_delta + z_avg_delta) / 3;
+
+   x_scale = avg_delta / x_avg_delta;
+   y_scale = avg_delta / y_avg_delta;
+   z_scale = avg_delta / z_avg_delta;
+
+   x_value_float = (x_value - x_offset) * x_scale;
+   y_value_float = (y_value - y_offset) * y_scale;
+   z_value_float = (z_value - z_offset) * z_scale;
+   
+   x_value = (signed int16) x_value_float;
+   y_value = (signed int16) y_value_float;
+   z_value = (signed int16) z_value_float;
+}
+
+void readCompass()
+{
+   QMC5883_read_axes(&x_value, &y_value, &z_value);
+   calibrationCompass();
+   a = atan2(y_value,x_value) * 180.0 / PI;
+   a-=15;
+   if(a<0)
+   a+=360;
+}
+
+void startCalibration()
+{
+   for(int i=0; i<10; i++)
+   {
+      QMC5883_read_axes(&x_value, &y_value, &z_value);
+      if(x_value>x_max)
+      x_max=x_value;
+      if(y_value>y_max)
+      y_max=y_value;
+      if(z_value>z_max)
+      z_max=z_value;
+      if(x_value<x_min)
+      x_min=x_value;
+      if(y_value<y_min)
+      y_min=y_value;
+      if(z_value<z_min)
+      z_min=z_value;
+   }
+   
+   SSD1306_ClearDisplay();
+   sprintf(txt, "xmin=%Ld",x_min);
+   SSD1306_DrawText(0, 0, txt,1);
+   sprintf(txt, "ymin=%Ld",y_min);
+   SSD1306_DrawText(0, 25, txt,1);
+   sprintf(txt, "zmin=%Ld",z_min);
+   SSD1306_DrawText(0, 50, txt,1);
+   sprintf(txt, "xmax=%Ld",x_max);
+   SSD1306_DrawText(60, 0, txt,1);
+   sprintf(txt, "ymax=%Ld",y_max);
+   SSD1306_DrawText(60, 25, txt,1);
+   sprintf(txt, "zmax=%Ld",z_max);
+   SSD1306_DrawText(60, 50, txt,1);
+   SSD1306_Display();
+}
 
 
 
