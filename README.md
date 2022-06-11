@@ -6,4 +6,5 @@ Final project for Microsystems.
 - Arduino sketches from https://naylampmechatronics.com/
 - I2C library from https://github.com/jrowberg/i2cdevlib
 - OLED library from https://simple-circuit.com/pic18f4550-ssd1306-oled-display/
-- Translated I2C libraries from (...)
+- QMC588 library from https://libstock.mikroe.com/projects/view/4878/qmc5883-digital-compass-demo
+- MPU6050 library from https://github.com/tienanh08/MPU6050
