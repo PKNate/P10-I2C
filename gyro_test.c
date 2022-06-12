@@ -2,7 +2,7 @@
 #fuses HSPLL, PLL2, CPUDIV1, NOWDT, NOPROTECT, NOLVP, NOMCLR
 #device PASS_STRINGS = IN_RAM
 #use delay(clock=48M)
-#use I2C(MASTER, I2C1, FAST = 400000, stream = SSD1306_STREAM)  // Configuración I2C modo Master 
+#use I2C(MASTER, I2C1, FAST, stream = SSD1306_STREAM)  // Configuración I2C modo Master 
 #include <SSD1306OLED.c>
 #include <mpu6050.h>
 #include <math.h>
