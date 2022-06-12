@@ -1,21 +1,21 @@
 #include <18F4550.h>
-#fuses HS, PLL2, CPUDIV1, NOWDT, NOPROTECT, NOLVP, NOMCLR
+#fuses HSPLL, PLL2, CPUDIV1, NOWDT, NOPROTECT, NOLVP, NOMCLR
 #device PASS_STRINGS = IN_RAM
-#use delay(clock=8M)
-#use I2C(MASTER, I2C1, FAST = 400000, stream = SSD1306_STREAM)  // Configuración I2C modo Master 
+#use delay(clock=48M)
+#use I2C(MASTER, I2C1, FAST, stream = SSD1306_STREAM)  // Configuración I2C modo Master 
 #include <SSD1306OLED.c>
 #include <math.h>
 #include <QMC5883.c>
 
 //Mi casa: -1070 1392 -800 1402 -1131 2243
 //Majo:    -571 1632 -20 1965 -471 2051
-signed int16 x_min = -571;       //-1070;
-signed int16 x_max = 1632;       //1392;
-signed int16 y_min = -20;       //-800;
-signed int16 y_max = 1965;       //1402;
-signed int16 z_min = -471;       //-1131;
-signed int16 z_max = 2051;       //2243;
-signed int8 a_offset = 0;
+signed int16 x_min = -953;
+signed int16 x_max = 1583;
+signed int16 y_min = -456;
+signed int16 y_max = 1861;
+signed int16 z_min = -700;
+signed int16 z_max = 2495;
+signed int8 a_offset = 90;
 signed int16 x_value;
 signed int16 y_value;
 signed int16 z_value;
