@@ -30,12 +30,12 @@ float ang_x_prev=0, ang_y_prev=0;
 char txt[30];
 
 //mag_test variables
-signed int16 x_min = -953;
-signed int16 x_max = 1583;
-signed int16 y_min = -456;
-signed int16 y_max = 1861;
-signed int16 z_min = -700;
-signed int16 z_max = 2495;
+signed int16 x_min = -475;
+signed int16 x_max = 1110;
+signed int16 y_min = -130;
+signed int16 y_max = 1488;
+signed int16 z_min = -101;
+signed int16 z_max = 306;
 signed int8 a_offset = 90;
 signed int16 x_value;
 signed int16 y_value;
@@ -73,6 +73,11 @@ void main()
 { 
    delay_ms(500);
    SSD1306_Begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
+   InitMpu6050();
+   QMC5883_init();
+   setup_timer_0(T0_INTERNAL|T0_DIV_256);
+   set_timer0((int16)0);
+   
    drawInterface();
    SSD1306_Display();
    
@@ -81,12 +86,9 @@ void main()
       readTilt(); 
       tiltFullRange();
       readCompass();
-      delay_ms(100);
-      
-      drawGyro((int16)0,(signed int16)0);
+      drawGyro((int16)ang_x_full,(signed int16)height);
       drawCompass((int16)a);
       SSD1306_Display();
-      delay_ms(100);
    }
    
 }
