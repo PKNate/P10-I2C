@@ -31,7 +31,7 @@
 #fuses NOMCLR, INTRC_IO, NOWDT, NOPROTECT, NOLVP
 #use delay(clock = 8MHz)
 #use fast_io(B)
-#use I2C(MASTER, I2C1, FAST = 400000, stream = SSD1306_STREAM)  // Initialize I2C
+#use I2C(MASTER, I2C1, FAST, stream = SSD1306_STREAM)  // Initialize I2C
 
 // Include SSD1306 OLED driver source code
 #include <SSD1306OLED.c>
