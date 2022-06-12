@@ -19,6 +19,9 @@ signed int16 gx,gy,gz;
 float timer;
 float dt=1;
 float ang_x, ang_y, ang_x_full, ang_y_full, accel_ang_x, accel_ang_y;
+float height;
+float az_m_s2;
+
 float ang_x_prev=0, ang_y_prev=0;
 char txt[30];
 
@@ -42,8 +45,10 @@ void main()
       SSD1306_DrawText(0, 0, txt,1);
       sprintf(txt, "y=%5.2f",ang_y_full);
       SSD1306_DrawText(0, 25, txt,1);
-      sprintf(txt, "t=%.6f",dt);
+      sprintf(txt, "t=%.4f",dt);
       SSD1306_DrawText(0, 50, txt,1);
+      sprintf(txt, "h=%5.2f",height);
+      SSD1306_DrawText(60, 0, txt,1);
       SSD1306_Display();
    }
 }
@@ -66,6 +71,10 @@ void readTilt()
    
    ang_x = 0.8*(ang_x_prev+(gx/131)*dt) + 0.2*accel_ang_x;
    ang_y = 0.8*(ang_y_prev+(gy/131)*dt) + 0.2*accel_ang_y;
+   
+   az_m_s2 = az * (9.81/16384.0);
+   height = 10*(9.81-az_m_s2);
+   
    ang_x_prev=ang_x;
    ang_y_prev=ang_y;
 }
