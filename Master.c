@@ -9,6 +9,11 @@
 #include <mpu6050.c>
 #include <QMC5883.c>
 
+//Change y / x axis
+short axis=0;
+#INT_EXT2
+void change_axis(){if(axis) axis=0; else axis=1;}
+
 //oled_test variables
 float coord_x_prev=0, coord_y_prev=0, vert_x_prev=0, vert_y_prev=0, height_prev=0;
 
@@ -72,6 +77,8 @@ void readCompass();
 void main()
 { 
    delay_ms(500);
+   enable_interrupts(INT_EXT2);
+   enable_interrupts(GLOBAL);
    SSD1306_Begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
    InitMpu6050();
    QMC5883_init();
@@ -86,7 +93,8 @@ void main()
       readTilt(); 
       tiltFullRange();
       readCompass();
-      drawGyro((int16)ang_x_full,(signed int16)height);
+      if(axis)    drawGyro((int16)ang_y_full,(signed int16)height);
+      else        drawGyro((int16)ang_x_full,(signed int16)height);
       drawCompass((int16)a);
       SSD1306_Display();
    }
@@ -114,7 +122,6 @@ void drawInterface()
    SSD1306_DrawLine(97, 32, 103, 32, 1);
    SSD1306_DrawChar(30, 54, 'L',1);
    SSD1306_DrawChar(93, 54, 'R',1);
-   SSD1306_DrawChar(0, 54, 'x',1);
 }
 
 void drawCompass(int16 Azimuth)
@@ -188,6 +195,9 @@ void drawGyro(int16 Angle, signed int16 height)
   vert_x_prev=vert_x;
   vert_y_prev=vert_y;
   height_prev=height;
+  
+  if(axis)  SSD1306_DrawChar(0, 54, 'y',1);
+  else      SSD1306_DrawChar(0, 54, 'x',1);
 }
 
 void readTilt()
@@ -209,7 +219,7 @@ void readTilt()
    ang_x = 0.8*(ang_x_prev+(gx/131)*dt) + 0.2*accel_ang_x;
    ang_y = 0.8*(ang_y_prev+(gy/131)*dt) + 0.2*accel_ang_y;
    
-   az_m_s2 = az * (9.81/16384.0);
+   az_m_s2 = (az*9.81)/16384;
    height = 10*(9.81-az_m_s2);
    
    ang_x_prev=ang_x;
